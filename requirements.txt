@@ -1,0 +1,6 @@
+git+https://github.com/mtg/freesound-python.git
+numpy
+pandas
+matplotlib
+scikit-learn
+jupyter
