@@ -1,5 +1,8 @@
 # Audio Mosaicing: A Modular Approach for Creative Sound Reconstruction 
 
+🚀 **Explore the full project code on GitHub:** [Freesound Mosaicing Repository](https://github.com/cepatinog/Freesound_mosaicing) 
+
+
 ## Abstract
 This project presents a modular, flexible workflow for creative audio mosaicing. By building a personal library of sound "fonts" from Freesound, analyzing audio files to extract timbral and harmonic features, and reconstructing target audio by replacing its frames with carefully selected source frames, we create a system capable of generating novel sonic textures. This approach has both artistic and practical applications, particularly music arrangements. I particularly find the ideas developed in this project very useful because this week I am developing the arrangements for a piece for violins, bass, piano, and electronics, to be presented at Business Immersion Week. Inspired by AI-generated audio from Suno, this piece incorporates live looping techniques where selected fragments based on tonal characteristics enhance harmonic pad sections, while rhythmic parts benefit from well-matched percussion sounds.
 
@@ -77,3 +80,6 @@ Through a modular design covering sound collection, analysis, and mosaicing, thi
 - **Practical application:** The system enhances my live looping arrangement by precisely selecting audio fragments for harmonic and rhythmic sections.
 
 Future work could explore additional features (e.g., spectral centroid, flux) and further refine tonality matching. This project not only provides a powerful tool for creative sound reconstruction but also directly supports my ongoing musical work, merging technical innovation with artistic expression.
+
+
+🚀 **Explore the full project code on GitHub:** [Freesound Mosaicing Repository](https://github.com/cepatinog/Freesound_mosaicing)  
