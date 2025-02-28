@@ -1,0 +1,16 @@
+# Ignore downloaded audio files
+data/raw/
+
+# Optionally, ignore other folders you don't want to upload
+data/processed/
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore virtual environment folders
+venv/
+env/
