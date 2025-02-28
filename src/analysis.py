@@ -53,6 +53,11 @@ def analyze_sound(audio_path, frame_size=None, audio_id=None, sync_with_beats=Fa
     for count, (fstart, fend) in enumerate(frame_start_end_samples):
         frame = audio[fstart:fend]
         # Create a dictionary to store analysis results for this frame
+
+        # Ensure the frame has an even number of samples
+        if len(frame) % 2 != 0:
+            frame = frame[:-1]  # Drop the last sample if odd
+            
         frame_output = {
             'freesound_id': audio_id,
             'id': f'{audio_id}_f{count}',
