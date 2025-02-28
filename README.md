@@ -65,7 +65,7 @@ FREESOUND/
 ## Installation
 ### Clone the Repository
 ```bash
-git clone https://github.com/cepatinog/freesound.git
+git clone https://github.com/cepatinog/Freesound_mosaicing
 cd freesound
 ```
 ### Create and Activate a Virtual Environment
