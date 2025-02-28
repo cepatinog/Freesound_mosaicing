@@ -1,9 +1,6 @@
 # Ignore downloaded audio files
 data/raw/
 
-# Optionally, ignore other folders you don't want to upload
-data/processed/
-
 # Ignore Python cache files
 __pycache__/
 *.py[cod]
