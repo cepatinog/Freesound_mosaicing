@@ -75,14 +75,17 @@ def analyze_sound(audio_path, frame_size=None, audio_id=None, sync_with_beats=Fa
         for j, coeff in enumerate(mfcc_coeffs):
             frame_output[f'mfcc_{j}'] = coeff
         
-        analysis_output.append(frame_output)
-    
-
 
     # Extract other features here and add to 'frame_output' dictionary
-        # ...
+
+        # Extract tonality information using Essentia's KeyExtractor
+        key_extractor = estd.KeyExtractor()
+        key, scale, key_strength = key_extractor(frame)
+        frame_output['key'] = key          # e.g., 0=C, 1=C#/Db, etc.
+        frame_output['scale'] = scale      # 'major' or 'minor'
+        frame_output['key_strength'] = key_strength
 
 
-
+        analysis_output.append(frame_output)
 
     return analysis_output

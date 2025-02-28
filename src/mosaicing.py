@@ -56,25 +56,55 @@ def find_similar_frames(query_frame, df_source_frames, n, features):
     distances, indices = nbrs.kneighbors(query_frame)
     return [df_source_frames.iloc[k] for k in indices[0]]
 
-def choose_frame_from_source_collection(target_frame, df_source_frames):
+# def choose_frame_from_source_collection(target_frame, df_source_frames):
+#     """
+#     Choose one frame from the source collection to replace a target frame.
+#     Uses MFCC features for similarity and introduces a bit of randomization.
+    
+#     Parameters:
+#       - target_frame: A dictionary or Pandas Series containing features of the target frame.
+#       - df_source_frames: A Pandas DataFrame with source frame features.
+    
+#     Returns:
+#       - A Pandas Series representing the chosen source frame.
+#     """
+#     n_neighbors = 10
+#     # Use MFCC coefficients as similarity features; adjust as needed
+#     similarity_features = [f'mfcc_{i}' for i in range(13)]
+    
+#     query_features = target_frame[similarity_features].values
+#     similar_frames = find_similar_frames(query_features, df_source_frames, n_neighbors, similarity_features)
+    
+#     # Randomly choose one frame among the top similar frames for variety
+#     chosen_frame = random.choice(similar_frames)
+#     return chosen_frame
+
+
+def choose_frame_from_source_collection(target_frame, df_source_frames, random_factor=0.2):
     """
     Choose one frame from the source collection to replace a target frame.
-    Uses MFCC features for similarity and introduces a bit of randomization.
+    Uses MFCC features for similarity and adds additional randomization.
     
     Parameters:
       - target_frame: A dictionary or Pandas Series containing features of the target frame.
       - df_source_frames: A Pandas DataFrame with source frame features.
+      - random_factor: A float between 0 and 1 to control randomization strength.
     
     Returns:
       - A Pandas Series representing the chosen source frame.
     """
     n_neighbors = 10
-    # Use MFCC coefficients as similarity features; adjust as needed
     similarity_features = [f'mfcc_{i}' for i in range(13)]
-    
     query_features = target_frame[similarity_features].values
     similar_frames = find_similar_frames(query_features, df_source_frames, n_neighbors, similarity_features)
     
-    # Randomly choose one frame among the top similar frames for variety
-    chosen_frame = random.choice(similar_frames)
+    # Calculate distances for additional randomization (if desired)
+    # Here, we assign a probability inversely proportional to the rank and add some randomness.
+    # For simplicity, we randomly choose one among the top n_neighbors weighted by random_factor.
+    if random_factor > 0:
+        weights = np.linspace(1, 1 - random_factor, num=n_neighbors)
+        weights = weights / np.sum(weights)
+        chosen_frame = random.choices(similar_frames, weights=weights, k=1)[0]
+    else:
+        chosen_frame = similar_frames[0]
     return chosen_frame
