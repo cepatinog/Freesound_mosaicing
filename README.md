@@ -1,4 +1,4 @@
-# Audio Mosaicing for Creative Sound Reconstruction and Live Looping
+# Audio Mosaicing for Creative Sound Reconstruction 
 
 ## Overview
 This project presents a modular workflow for creative audio mosaicing, enabling the reconstruction of audio files by replacing segments with matching frames from a curated sound collection. The system facilitates:
@@ -125,6 +125,3 @@ This project is particularly valuable for my arrangement for violins, bass, pian
 - **Frame size selection matters:**
   - **8192 samples** for source ensures structural integrity.
   - **4096 samples** for target captures finer details.
-
-## Contributing
-Contributions, suggestions, and feature requests are welcome! Open an issue or submit a pull request.

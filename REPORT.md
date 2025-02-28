@@ -1,6 +1,10 @@
 # Audio Mosaicing: A Modular Approach for Creative Sound Reconstruction 
 
-🚀 **Explore the full project code on GitHub:** [Freesound Mosaicing Repository](https://github.com/cepatinog/Freesound_mosaicing) 
+## Carlos Eduardo Patiño Gómez
+
+**Explore the full project code on GitHub:** [Freesound Mosaicing Repository](https://github.com/cepatinog/Freesound_mosaicing) 
+
+https://github.com/cepatinog/Freesound_mosaicing
 
 
 ## Abstract
@@ -82,4 +86,4 @@ Through a modular design covering sound collection, analysis, and mosaicing, thi
 Future work could explore additional features (e.g., spectral centroid, flux) and further refine tonality matching. This project not only provides a powerful tool for creative sound reconstruction but also directly supports my ongoing musical work, merging technical innovation with artistic expression.
 
 
-🚀 **Explore the full project code on GitHub:** [Freesound Mosaicing Repository](https://github.com/cepatinog/Freesound_mosaicing)  
+**Explore the full project code on GitHub:** [Freesound Mosaicing Repository](https://github.com/cepatinog/Freesound_mosaicing)  

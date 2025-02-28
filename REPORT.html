@@ -1,0 +1,82 @@
+<h1 id="audio-mosaicing-a-modular-approach-for-creative-sound-reconstruction">Audio Mosaicing: A Modular Approach for Creative Sound Reconstruction</h1>
+<h2 id="carlos-eduardo-patiño-gómez">Carlos Eduardo Patiño Gómez</h2>
+<p><strong>Explore the full project code on GitHub:</strong> <a href="https://github.com/cepatinog/Freesound_mosaicing">Freesound Mosaicing Repository</a></p>
+<p>https://github.com/cepatinog/Freesound_mosaicing</p>
+<h2 id="abstract">Abstract</h2>
+<p>This project presents a modular, flexible workflow for creative audio mosaicing. By building a personal library of sound “fonts” from Freesound, analyzing audio files to extract timbral and harmonic features, and reconstructing target audio by replacing its frames with carefully selected source frames, we create a system capable of generating novel sonic textures. This approach has both artistic and practical applications, particularly music arrangements. I particularly find the ideas developed in this project very useful because this week I am developing the arrangements for a piece for violins, bass, piano, and electronics, to be presented at Business Immersion Week. Inspired by AI-generated audio from Suno, this piece incorporates live looping techniques where selected fragments based on tonal characteristics enhance harmonic pad sections, while rhythmic parts benefit from well-matched percussion sounds.</p>
+<p>Our research compares different feature sets for similarity matching (MFCCs alone vs. MFCCs combined with loudness) and explores advanced techniques such as beat-synchronized segmentation and tonality-based filtering. Our findings demonstrate that parameter choices—including frame size, feature selection, and synchronization methods—greatly influence the quality and coherence of the reconstructed audio.</p>
+<h2 id="introduction">1. Introduction</h2>
+<p>Recent advances in computational audio analysis and machine learning have enabled novel methods for creative sound processing. Audio mosaicing is one such technique that reconstructs a target audio signal by replacing segments with matching pieces from a pre-collected sound library. This project was designed to explore audio mosaicing through a modular and hierarchical approach, structured into three main phases:</p>
+<ul>
+<li><strong>Collection of Sounds:</strong> Building a personal sound library by querying the Freesound API.</li>
+<li><strong>Audio Analysis:</strong> Extracting key audio features (MFCCs, loudness, and tonality) from both source and target files.</li>
+<li><strong>Audio Mosaicing:</strong> Reconstructing a target audio file by replacing its frames with similar source frames based on different feature sets.</li>
+</ul>
+<p>This method is particularly relevant for my current project because I’m working on a piece that incorporates live looping and real-time manipulation of audio fragments. Carefully selecting audio fragments—such as harmonic pads extracted from tonal features and rhythmic elements from percussive sounds—is crucial. The mosaicing method developed here allows for precise matching based on timbral, dynamic, and tonal characteristics, ensuring seamless integration into the musical texture.</p>
+<h2 id="methodology">2. Methodology</h2>
+<h3 id="project-structure-and-modular-design">Project Structure and Modular Design</h3>
+<p>The project is organized into three primary folders:</p>
+<ul>
+<li><strong><code>data/</code></strong>: Contains raw audio files (downloaded previews), processed outputs, and metadata CSV files.</li>
+<li><strong><code>notebooks/</code></strong>: Jupyter notebooks for each stage of the project (sound collection, analysis, and mosaicing).</li>
+<li><strong><code>src/</code></strong>: Python modules implementing core functionality, including:
+<ul>
+<li><code>config.py</code>: Centralizes API keys, file paths, and metadata field definitions.</li>
+<li><code>sound_collection.py</code>: Handles querying the Freesound API, downloading audio previews, and generating metadata records.</li>
+<li><code>analysis.py</code>: Implements <code>analyze_sound</code>, which segments audio (fixed or beat-synchronized) and extracts features such as MFCCs, loudness, and tonality.</li>
+<li><code>mosaicing.py</code>: Provides functions for loading audio segments, finding similar frames via nearest-neighbor searches, and selecting replacement frames based on various feature sets, including advanced tonality-based filtering.</li>
+</ul></li>
+</ul>
+<p>A <code>.gitignore</code> file ensures that large audio files (e.g., those in <code>data/raw/</code>) are excluded from version control.</p>
+<h3 id="sound-collection">Sound Collection</h3>
+<p>The first phase involves creating a custom collection of sound “fonts” by querying Freesound for electronic sounds, percussions, violins, basses, and synthesizers. The <code>query_freesound</code> function retrieves sounds that meet specified duration filters, and high-quality previews are downloaded to <code>data/raw/</code>. Metadata—including sound ID, name, tags, and local file path—is extracted via <code>make_metadata_record</code> and saved to <code>data/metadata/fonts_collection.csv</code>.</p>
+<h3 id="audio-analysis">Audio Analysis</h3>
+<p>The analysis phase processes both the source collection and a target audio file. The <code>analyze_sound</code> function (in <code>src/analysis.py</code>) performs the following:</p>
+<ul>
+<li><strong>Loading Audio:</strong> Uses Essentia’s <code>MonoLoader</code> to read files.</li>
+<li><strong>Segmentation:</strong> Divides the audio into frames using fixed-size segmentation (e.g., 8192 samples for source, 4096 samples for target) or beat-synchronized segmentation (<code>sync_with_beats=True</code>).</li>
+<li><strong>Feature Extraction:</strong>
+<ul>
+<li><strong>Loudness:</strong> Calculated with Essentia’s <code>Loudness</code> algorithm and normalized by frame length.</li>
+<li><strong>MFCCs:</strong> Extracted using a combination of windowing, spectrum calculation, and MFCC extraction.</li>
+<li><strong>Tonality:</strong> Extracted using Essentia’s <code>KeyExtractor</code>, including key, scale, and key strength.</li>
+</ul></li>
+</ul>
+<p>Extracted features for every frame are stored in <code>source_analysis.csv</code> and <code>target_analysis.csv</code>, forming the foundation for mosaicing.</p>
+<h3 id="audio-mosaicing">Audio Mosaicing</h3>
+<p>In the final stage, the target audio is reconstructed by replacing its frames with similar frames from the source collection. The <code>src/mosaicing.py</code> module provides key functions:</p>
+<ul>
+<li><strong><code>get_audio_file_segment</code></strong>: Retrieves cached audio segments.</li>
+<li><strong><code>find_similar_frames</code></strong>: Uses scikit-learn’s <code>NearestNeighbors</code> for similarity matching.</li>
+<li><strong><code>choose_frame_from_source_collection</code></strong>: Uses MFCC-based selection with a controlled random factor.</li>
+<li><strong><code>choose_frame_by_tonality</code></strong>: Filters source frames by matching the target frame’s tonality before nearest-neighbor matching.</li>
+<li><strong><code>reconstruct_target</code></strong>: Iterates over target frames, selects a matching source frame, extracts the corresponding audio segment, and reconstructs the full audio.</li>
+</ul>
+<h2 id="experiments-and-findings">3. Experiments and Findings</h2>
+<h3 id="feature-set-experiments">Feature Set Experiments</h3>
+<p>Three experiments were conducted:</p>
+<ul>
+<li><strong>Experiment A (MFCC Only):</strong> Captures spectral envelope but lacks dynamic nuance.</li>
+<li><strong>Experiment B (MFCC + Loudness):</strong> Adds dynamic information, improving transitions and natural feel.</li>
+<li><strong>Experiment C (Tonality-Based Matching):</strong> Ensures harmonic coherence by matching key, scale, and key strength.</li>
+</ul>
+<h3 id="parameter-choices-and-impact">Parameter Choices and Impact</h3>
+<ul>
+<li><strong>Frame Size:</strong> 8192 samples for source and 4096 samples for target provided a balance between structure and detail.</li>
+<li><strong>Randomization:</strong> Controlled variability in frame selection, balancing creativity and consistency.</li>
+<li><strong>Tonality Filtering:</strong> Improved harmonic compatibility, particularly for harmonic pads.</li>
+</ul>
+<h3 id="personal-relevance">Personal Relevance</h3>
+<ul>
+<li><strong>Harmonic Pads:</strong> Ensured tonal consistency, crucial for smooth transitions.</li>
+<li><strong>Rhythmic Sections:</strong> Percussive elements selected via MFCC-based features provided essential rhythmic drive.</li>
+</ul>
+<h2 id="conclusion">4. Conclusion</h2>
+<p>Through a modular design covering sound collection, analysis, and mosaicing, this project has developed a robust system for creative audio reconstruction. Key takeaways include:</p>
+<ul>
+<li><strong>Feature selection is crucial:</strong> Including loudness and tonality improves smoothness and harmonic coherence.</li>
+<li><strong>Parameter tuning matters:</strong> Frame size and randomization significantly impact output quality.</li>
+<li><strong>Practical application:</strong> The system enhances my live looping arrangement by precisely selecting audio fragments for harmonic and rhythmic sections.</li>
+</ul>
+<p>Future work could explore additional features (e.g., spectral centroid, flux) and further refine tonality matching. This project not only provides a powerful tool for creative sound reconstruction but also directly supports my ongoing musical work, merging technical innovation with artistic expression.</p>
+<p><strong>Explore the full project code on GitHub:</strong> <a href="https://github.com/cepatinog/Freesound_mosaicing">Freesound Mosaicing Repository</a></p>
